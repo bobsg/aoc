@@ -27,7 +27,7 @@ func Distance(list1 []int64, list2 []int64) int64 {
 	return distance
 }
 
-func ParseInput(input string) ([]int64, []int64, error) {
+func ParseInput(input string) ([]int64, []int64) {
 	rows := strings.Split(input, "\n")
 	var list1 []int64
 	var list2 []int64
@@ -48,5 +48,5 @@ func ParseInput(input string) ([]int64, []int64, error) {
 		}
 		list2 = append(list2, num)
 	}
-	return list1, list2, nil
+	return list1, list2
 }

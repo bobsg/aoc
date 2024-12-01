@@ -11,11 +11,10 @@ func main() {
 	if err != nil {
 		log.Fatal("Could not read input")
 	}
-	list1, list2, err := ParseInput(string(input))
-	if err != nil {
-		log.Fatal("Could not parse input")
-	}
+	list1, list2 := ParseInput(string(input))
 
-	result := Distance(list1, list2)
-	fmt.Println(result)
+	distance := Distance(list1, list2)
+	fmt.Printf("Distance: %d\n", distance)
+	similarity := Similarity(list1, list2)
+	fmt.Printf("Similarity: %d", similarity)
 }
