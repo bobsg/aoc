@@ -6,8 +6,8 @@ import (
 )
 
 func TestGenerateOperations(t *testing.T) {
-
-	got := GenerateOperations("+", "*", 3)
+	inputs := []string{"+", "*"}
+	got := GenerateOperations(3, inputs)
 	want := [][][]string{
 		{{}},
 		{{"+"}, {"*"}},

@@ -13,6 +13,11 @@ func main() {
 	}
 
 	input := ParseInput(f)
-	sum := SumValidations(input)
+	ops := []Operation{Add, Mul}
+	sum := SumValidations(input, ops)
 	fmt.Printf("Sum: %d\n", sum)
+
+	opsPart2 := []Operation{Add, Mul, Conc}
+	sumPart2 := SumValidations(input, opsPart2)
+	fmt.Printf("Sum part2: %d\n", sumPart2)
 }

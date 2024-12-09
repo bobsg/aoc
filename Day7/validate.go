@@ -2,8 +2,8 @@ package main
 
 import "log"
 
-func SumValidations(calibrations []Equation) int {
-	valids := ValidateAll(calibrations)
+func SumValidations(calibrations []Equation, operations []Operation) int {
+	valids := ValidateAll(calibrations, operations)
 
 	sum := 0
 	for i := 0; i < len(valids); i++ {
@@ -13,13 +13,12 @@ func SumValidations(calibrations []Equation) int {
 	return sum
 }
 
-func ValidateAll(calibrations []Equation) []int {
+func ValidateAll(calibrations []Equation, operations []Operation) []int {
 	maxLength := 0
 	for i := 0; i < len(calibrations); i++ {
 		maxLength = max(maxLength, len(calibrations[i].Numbers))
 	}
-
-	ops := GenerateOperations(Operation(Add), Operation(Mul), maxLength)
+	ops := GenerateOperations(maxLength, operations)
 	valids := []int{}
 	for i := 0; i < len(calibrations); i++ {
 		if ValidateCalibration(calibrations[i], ops) {

@@ -11,8 +11,8 @@ func TestValidateSuccess(t *testing.T) {
 		TestValue: 3267,
 		Numbers:   []int{81, 40, 27},
 	}
-
-	ops := GenerateOperations(Operation(Add), Operation(Mul), 3)
+	o := []Operation{Add, Mul}
+	ops := GenerateOperations(3, o)
 
 	got := ValidateCalibration(input, ops)
 
@@ -26,7 +26,8 @@ func TestValidateFailure(t *testing.T) {
 		TestValue: 21037,
 		Numbers:   []int{9, 7, 18, 13},
 	}
-	ops := GenerateOperations(Operation(Add), Operation(Mul), 4)
+	o := []Operation{Add, Mul}
+	ops := GenerateOperations(4, o)
 
 	got := ValidateCalibration(input, ops)
 
@@ -37,8 +38,8 @@ func TestValidateFailure(t *testing.T) {
 
 func TestValidateAll(t *testing.T) {
 	input := ParseInput(strings.NewReader(longInput))
-
-	got := ValidateAll(input)
+	ops := []Operation{Add, Mul}
+	got := ValidateAll(input, ops)
 	want := []int{190, 3267, 292}
 
 	if !slices.Equal(got, want) {
@@ -50,8 +51,22 @@ func TestValidateAll(t *testing.T) {
 func TestSumValidations(t *testing.T) {
 	input := ParseInput(strings.NewReader(longInput))
 
-	got := SumValidations(input)
+	ops := []Operation{Add, Mul}
+	got := SumValidations(input, ops)
 	want := 3749
+
+	if got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+
+}
+
+func TestSumValidationsPart2(t *testing.T) {
+	input := ParseInput(strings.NewReader(longInput))
+
+	ops := []Operation{Add, Mul, Conc}
+	got := SumValidations(input, ops)
+	want := 11387
 
 	if got != want {
 		t.Errorf("got %d, want %d", got, want)
