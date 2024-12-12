@@ -42,3 +42,7 @@ func (d *Distance) Invert() Distance {
 	newDistance.Y = d.Y * -1
 	return newDistance
 }
+
+func (d *Distance) Mul(x int) Distance {
+	return NewDistance(d.X*x, d.Y*x)
+}

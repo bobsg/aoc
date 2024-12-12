@@ -38,6 +38,15 @@ func (a *Antennas) CalculateAllAntiNodes() AntiNodes {
 	return nodes
 }
 
+func (a *Antennas) CalculateAllAntiNodesP2() AntiNodes {
+	pairs := a.createAllPairs()
+	nodes := NewAntiNodes(a.width, a.height)
+	for _, p := range pairs {
+		nodes.AddNodes(p.CalculateAntiNodesP2(a.width, a.height))
+	}
+	return nodes
+}
+
 // createPairs creates all possible pairs for the given frequency.
 func (a *Antennas) createPairs(f frequency) []pair {
 	antennas, ok := a.antennas[f]
@@ -74,4 +83,36 @@ func (p *pair) CalculateAntiNodes() []AntiNode {
 	a2 := NewAntiNode(p2, p.A.Freq)
 
 	return []AntiNode{a1, a2}
+}
+
+func (p *pair) CalculateAntiNodesP2(width, height int) []AntiNode {
+	result := []AntiNode{}
+	freq := p.A.Freq
+	distance := p.A.Pos.DistanceTo(p.B.Pos)
+	inverted := distance.Invert()
+
+	foundNode := true
+	for x := 0; foundNode; x++ {
+		foundNode = false
+		d := distance.Mul(x)
+		i := inverted.Mul(x)
+
+		p1 := p.B.Pos.NewPositionAtDistance(d)
+		p2 := p.A.Pos.NewPositionAtDistance(i)
+
+		if isInBounds(width, height, p1) {
+			result = append(result, NewAntiNode(p1, freq))
+			foundNode = true
+		}
+		if isInBounds(width, height, p2) {
+			result = append(result, NewAntiNode(p2, freq))
+			foundNode = true
+		}
+	}
+
+	return result
+}
+
+func isInBounds(width, height int, p Position) bool {
+	return p.X >= 0 && p.X < width && p.Y >= 0 && p.Y < height
 }

@@ -1,39 +1,9 @@
 package main
 
 import (
-	"reflect"
 	"strings"
 	"testing"
 )
-
-func TestFromAntennaPair(t *testing.T) {
-	p := pair{
-		A: Antenna{
-			Freq: 'A',
-			Pos:  NewPosition(2, 2),
-		},
-		B: Antenna{
-			Freq: 'A',
-			Pos:  NewPosition(4, 5),
-		},
-	}
-
-	got := p.CalculateAntiNodes()
-	want := []AntiNode{
-		{
-			Freq: 'A',
-			Pos:  NewPosition(6, 8),
-		},
-		{
-			Freq: 'A',
-			Pos:  NewPosition(0, -1),
-		},
-	}
-
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got %#v, want %#v", got, want)
-	}
-}
 
 func TestAdd(t *testing.T) {
 	a := AntiNodes{
@@ -128,10 +98,22 @@ func TestUniquePositions(t *testing.T) {
 
 func TestUniqueExampleInput(t *testing.T) {
 	antennas := ParseInput(strings.NewReader(longInput))
-	antiNodes := antennas.CalculateAllAntiNodes()
-	u := antiNodes.UniquePositions()
 
-	if len(u) != 14 {
-		t.Errorf("got %d want 14", len(u))
-	}
+	t.Run("Part1", func(t *testing.T) {
+		antiNodes := antennas.CalculateAllAntiNodes()
+		u := antiNodes.UniquePositions()
+
+		if len(u) != 14 {
+			t.Errorf("got %d want 14", len(u))
+		}
+	})
+	t.Run("Part2", func(t *testing.T) {
+		antiNodes := antennas.CalculateAllAntiNodesP2()
+		u := antiNodes.UniquePositions()
+
+		if len(u) != 34 {
+			t.Errorf("got %d want 14", len(u))
+		}
+	})
+
 }

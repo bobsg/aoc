@@ -74,3 +74,71 @@ var antennasInput = Antennas{
 		},
 	},
 }
+
+func TestCalculateAntiNodes(t *testing.T) {
+	p := pair{
+		A: Antenna{
+			Freq: 'A',
+			Pos:  NewPosition(2, 2),
+		},
+		B: Antenna{
+			Freq: 'A',
+			Pos:  NewPosition(4, 5),
+		},
+	}
+
+	t.Run("calculate antinodes p1", func(t *testing.T) {
+		got := p.CalculateAntiNodes()
+		want := []AntiNode{
+			{
+				Freq: 'A',
+				Pos:  NewPosition(6, 8),
+			},
+			{
+				Freq: 'A',
+				Pos:  NewPosition(0, -1),
+			},
+		}
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %#v, want %#v", got, want)
+		}
+	})
+
+	t.Run("calculate antinodes p2", func(t *testing.T) {
+		p := pair{
+			A: Antenna{
+				Freq: '0',
+				Pos:  NewPosition(0, 0),
+			},
+			B: Antenna{
+				Freq: '0',
+				Pos:  NewPosition(3, 1),
+			},
+		}
+		got := p.CalculateAntiNodesP2(10, 10)
+		want := []AntiNode{
+			{
+				Freq: '0',
+				Pos:  NewPosition(3, 1),
+			},
+			{
+				Freq: '0',
+				Pos:  NewPosition(0, 0),
+			},
+
+			{
+				Freq: '0',
+				Pos:  NewPosition(6, 2),
+			},
+			{
+				Freq: '0',
+				Pos:  NewPosition(9, 3),
+			},
+		}
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %#v, want %#v", got, want)
+		}
+	})
+}
