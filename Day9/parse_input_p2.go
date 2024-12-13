@@ -8,10 +8,10 @@ import (
 	"strconv"
 )
 
-func ParseInput(r io.Reader) *Disk {
+func ParseInputP2(r io.Reader) *DiskP2 {
 	scanner := bufio.NewScanner(r)
 	scanner.Split(bufio.ScanRunes)
-	disk := NewDisk()
+	disk := NewDiskP2()
 	id := 0
 	free := false
 	for scanner.Scan() {
@@ -21,10 +21,10 @@ func ParseInput(r io.Reader) *Disk {
 			log.Panicf("could not parse %s as int", s)
 		}
 		if !free {
-			disk.AddBlocks(id, size)
+			disk.AddBlock(id, size)
 			id++
 		} else {
-			disk.AddBlocks(-1, size)
+			disk.AddFreeBlock(size)
 		}
 		free = !free
 	}
