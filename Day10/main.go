@@ -18,4 +18,7 @@ func main() {
 	topoMap := ParseInput(f)
 	sum := topoMap.SumAllTrails()
 	fmt.Printf("Sum of scores: %d\n", sum)
+
+	sumDistinct := topoMap.SumDistinctTrails()
+	fmt.Printf("Sum of distinct trails: %d\n", sumDistinct)
 }

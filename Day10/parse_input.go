@@ -15,7 +15,12 @@ func ParseInput(r io.Reader) TopoMap {
 			if char == '\n' {
 				break
 			}
-			n := int(char - '0')
+			n := 0
+			if char == '.' {
+				n = -1
+			} else {
+				n = int(char - '0')
+			}
 			row = append(row, n)
 		}
 		result = append(result, row)

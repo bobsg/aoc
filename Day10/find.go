@@ -87,16 +87,44 @@ func (t TopoMap) FindTrailsForHead(head *TrailHead) []*TrailPart {
 		prev := found
 		found = map[string]*TrailPart{}
 		for _, p := range prev {
-			// Keep ends
-			if p.Step == 9 {
-				found[makeKey(p)] = p
-			}
 			steps := t.FindNextSteps(p)
 			addSteps(found, steps)
 		}
 	}
 
 	return slices.Collect(maps.Values(found))
+}
+
+func (t TopoMap) FindDistinctTrailsForHead(head *TrailHead) []*TrailPart {
+	found := []*TrailPart{}
+	start := &TrailPart{
+		X:    head.X,
+		Y:    head.Y,
+		Step: 0,
+	}
+	found = append(found, start)
+	for !allAtEndDistinct(found) {
+		prev := found
+		found = []*TrailPart{}
+		for _, p := range prev {
+			steps := t.FindNextSteps(p)
+			found = append(found, steps...)
+		}
+	}
+
+	return found
+}
+
+func (t TopoMap) SumDistinctTrails() int {
+	heads := t.FindTrailheads()
+	sum := 0
+	for _, h := range heads {
+		ends := t.FindDistinctTrailsForHead(h)
+		h.Score = len(ends)
+		sum += h.Score
+	}
+
+	return sum
 }
 
 func addSteps(dst map[string]*TrailPart, steps []*TrailPart) {
@@ -110,6 +138,15 @@ func makeKey(t *TrailPart) string {
 }
 
 func allAtEnd(parts map[string]*TrailPart) bool {
+	for _, v := range parts {
+		if v.Step != 9 {
+			return false
+		}
+	}
+	return true
+}
+
+func allAtEndDistinct(parts []*TrailPart) bool {
 	for _, v := range parts {
 		if v.Step != 9 {
 			return false

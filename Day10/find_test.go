@@ -50,6 +50,30 @@ func TestFindTrail(t *testing.T) {
 	}
 }
 
+func TestSumDistinctTrails(t *testing.T) {
+	topoMap := ParseInput(strings.NewReader(longInput))
+	sum := topoMap.SumDistinctTrails()
+
+	if sum != 81 {
+		t.Errorf("got %d, want 81", sum)
+	}
+}
+
+func TestFindDistinctTrailsForHead(t *testing.T) {
+	topoMap := ParseInput(strings.NewReader(longInput))
+	head := &TrailHead{
+		X:     2,
+		Y:     0,
+		Score: 0,
+	}
+
+	heads := topoMap.FindDistinctTrailsForHead(head)
+
+	if len(heads) != 20 {
+		t.Fatalf("expected 20 trails")
+	}
+}
+
 func TestFindNextSteps(t *testing.T) {
 	topoMap := TopoMap{
 		{0, 1, 2, 3},
