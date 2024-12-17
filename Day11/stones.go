@@ -68,6 +68,22 @@ func (l *Line) Split(s *Stone) {
 
 }
 
+func (l *Line) Delete(s *Stone) {
+	if s.Next != nil {
+		s.Next.Prev = s.Prev
+	}
+	if s.Prev != nil {
+		s.Prev.Next = s.Next
+	}
+	if l.First == s {
+		l.First = s.Next
+	}
+	if l.Last == s {
+		l.Last = s.Prev
+	}
+	l.length--
+}
+
 func (l *Line) FindStone(s *Stone) *Stone {
 	curr := l.First
 
@@ -117,6 +133,50 @@ func (l *Line) StringRev() string {
 	}
 
 	return b.String()
+}
+func (l *Line) BlinkNPreCalc(n int) int {
+	for i := 0; i < min(n, 30); i++ {
+		l.Blink()
+	}
+	if min(n, 30) == n {
+		return l.Len()
+	}
+	fmt.Println("Starting precalc")
+	preCalc := Fill()
+	fmt.Println("Precalc done")
+	sum := 0
+	for i := 30; i < n; i++ {
+		curr := l.First
+		for curr != nil {
+			if curr.Value < 10 {
+				sum += preCalc[curr.Value][n-i]
+				l.Delete(curr)
+			} else if len(strconv.Itoa(curr.Value))%2 == 0 {
+				l.Split(curr)
+				curr = curr.Next // jump over newly created stone
+			} else {
+				curr.Value *= 2024
+			}
+			curr = curr.Next
+		}
+	}
+	sum += l.Len()
+	return sum
+}
+
+func Fill() []map[int]int {
+	result := make([]map[int]int, 10)
+
+	for i := 0; i <= 9; i++ {
+		result[i] = map[int]int{}
+		l := Line{}
+		l.Add(i)
+		for x := 1; x <= 45; x++ {
+			l.Blink()
+			result[i][x] = l.Len()
+		}
+	}
+	return result
 }
 
 func (l *Line) Blink() {

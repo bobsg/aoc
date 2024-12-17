@@ -122,6 +122,18 @@ func TestBlinkN(t *testing.T) {
 	}
 }
 
+func TestBlinkNPreCalc(t *testing.T) {
+	l := &Line{}
+	l.Add(125)
+	l.Add(17)
+
+	l.BlinkNPreCalc(6)
+
+	if l.Len() != 22 {
+		t.Errorf("got len %d, want 22", l.Len())
+	}
+}
+
 func TestBlinkN2(t *testing.T) {
 	l := []int{125, 17}
 
